@@ -1,0 +1,50 @@
+services:
+  # ── Banco de dados ────────────────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: hortifresh-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: hortifresh
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-hortifresh_secret}
+      POSTGRES_DB: hortifresh
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hortifresh -d hortifresh"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # ── Aplicação Next.js ─────────────────────────────────────────────────────
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: hortifresh-app
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://hortifresh:${DB_PASSWORD:-hortifresh_secret}@postgres:5432/hortifresh
+      NODE_ENV: production
+
+  # ── Nginx (reverse proxy) ─────────────────────────────────────────────────
+  nginx:
+    image: nginx:alpine
+    container_name: hortifresh-nginx
+    restart: unless-stopped
+    depends_on:
+      - app
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - nginx_certs:/etc/nginx/certs
+
+volumes:
+  postgres_data:
+  nginx_certs:
