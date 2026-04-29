@@ -40,5 +40,5 @@ EXPOSE 3000
 
 # Aplica o schema no banco (cria tabelas se não existirem) e inicia o servidor
 # DATABASE_URL é injetado pelo docker-compose em runtime
-CMD ["sh", "-c", "npx prisma db push --skip-generate --accept-data-loss && npm start"]
+CMD ["sh", "-c", "npx prisma db push --accept-data-loss && npm start"]
 
