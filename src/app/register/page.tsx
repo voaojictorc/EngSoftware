@@ -30,8 +30,7 @@ export default function RegisterPage() {
       if (!res.ok) {
         setError(data.error ?? "Erro ao criar conta");
       } else {
-        router.push("/");
-        router.refresh();
+        window.location.href = "/";
       }
     } catch {
       setError("Falha na conexão. Tente novamente.");
