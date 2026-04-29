@@ -38,5 +38,7 @@ COPY --from=builder /app/prisma.config.ts ./
 
 EXPOSE 3000
 
-# Roda as migrations e depois inicia o servidor
-CMD ["sh", "-c", "npx prisma migrate deploy && npm start"]
+# Aplica o schema no banco (cria tabelas se não existirem) e inicia o servidor
+# DATABASE_URL é injetado pelo docker-compose em runtime
+CMD ["sh", "-c", "npx prisma db push --skip-generate --accept-data-loss && npm start"]
+
