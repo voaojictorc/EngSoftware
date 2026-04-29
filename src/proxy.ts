@@ -8,7 +8,7 @@ const SECRET = new TextEncoder().encode(
 const AUTH_PATHS = ["/login", "/register"];
 const PUBLIC_API_PATHS = ["/api/auth"];
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (
