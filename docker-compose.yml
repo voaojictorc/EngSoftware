@@ -29,6 +29,7 @@ services:
         condition: service_healthy
     environment:
       DATABASE_URL: postgresql://hortifresh:${DB_PASSWORD:-hortifresh_secret}@postgres:5432/hortifresh
+      JWT_SECRET: ${JWT_SECRET:-hortifresh-change-this-secret-in-production-min32chars}
       NODE_ENV: production
 
   # ── Nginx (reverse proxy) ─────────────────────────────────────────────────
