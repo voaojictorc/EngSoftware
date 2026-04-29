@@ -1,4 +1,4 @@
-"use client";
+ï»¿"use client";
 
 import { useEffect, useState } from "react";
 import {
@@ -104,13 +104,13 @@ export default function DashboardPage() {
             <AlertTriangle className="h-4 w-4 text-amber-600" />
           </div>
           <div className="flex-1 text-sm">
-            <p className="font-semibold text-amber-900">Atenção necessária</p>
+            <p className="font-semibold text-amber-900">AtenÃ§Ã£o necessÃ¡ria</p>
             <p className="mt-0.5 text-amber-700">
               {(stats?.alertasValidade ?? 0) > 0 && (
-                <span><strong>{stats?.alertasValidade}</strong> lote(s) vencem em até 3 dias. </span>
+                <span><strong>{stats?.alertasValidade}</strong> lote(s) vencem em atÃ© 3 dias. </span>
               )}
               {(stats?.estoqueBaixo ?? 0) > 0 && (
-                <span><strong>{stats?.estoqueBaixo}</strong> produto(s) com estoque abaixo do mínimo.</span>
+                <span><strong>{stats?.estoqueBaixo}</strong> produto(s) com estoque abaixo do mÃ­nimo.</span>
               )}
             </p>
           </div>
@@ -123,7 +123,7 @@ export default function DashboardPage() {
       {/* Stat cards */}
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         <GradientCard
-          title="Faturamento do Mês"
+          title="Faturamento do MÃªs"
           value={formatCurrency(stats?.faturamentoMes ?? 0)}
           subtitle="Receita acumulada"
           icon={<TrendingUp className="h-5 w-5 text-white" />}
@@ -147,9 +147,9 @@ export default function DashboardPage() {
           href="/estoque"
         />
         <GradientCard
-          title="Perdas do Mês"
+          title="Perdas do MÃªs"
           value={formatCurrency(stats?.perdasMes ?? 0)}
-          subtitle="Valor desperdiçado"
+          subtitle="Valor desperdiÃ§ado"
           icon={<Trash2 className="h-5 w-5 text-white" />}
           gradient="from-rose-400 to-rose-600"
           href="/perdas"
@@ -161,8 +161,8 @@ export default function DashboardPage() {
         <div className="lg:col-span-2 rounded-2xl border border-slate-200 bg-white p-6">
           <div className="mb-5 flex items-center justify-between">
             <div>
-              <h3 className="text-sm font-semibold text-slate-900">Faturamento — Últimos 6 Meses</h3>
-              <p className="text-xs text-slate-400 mt-0.5">Evolução da receita mensal</p>
+              <h3 className="text-sm font-semibold text-slate-900">Faturamento â€” Ãšltimos 6 Meses</h3>
+              <p className="text-xs text-slate-400 mt-0.5">EvoluÃ§Ã£o da receita mensal</p>
             </div>
             <div className="flex items-center gap-1.5 rounded-full bg-green-50 px-3 py-1 text-xs font-medium text-green-700">
               <Activity className="h-3 w-3" />
@@ -207,7 +207,7 @@ export default function DashboardPage() {
           <div className="mb-5 flex items-center justify-between">
             <div>
               <h3 className="text-sm font-semibold text-slate-900">Mais Vendidos</h3>
-              <p className="text-xs text-slate-400 mt-0.5">Top produtos do mês</p>
+              <p className="text-xs text-slate-400 mt-0.5">Top produtos do mÃªs</p>
             </div>
             <Boxes className="h-4 w-4 text-slate-300" />
           </div>
@@ -233,7 +233,7 @@ export default function DashboardPage() {
                           {i + 1}
                         </span>
                         <span className="truncate text-sm font-medium text-slate-700">
-                          {item.produto?.nome ?? "—"}
+                          {item.produto?.nome ?? "â€”"}
                         </span>
                       </div>
                       <span className="shrink-0 text-xs font-semibold text-slate-600">
@@ -254,7 +254,7 @@ export default function DashboardPage() {
 
           {(data?.produtosMaisVendidos ?? []).length > 0 && (
             <Link href="/relatorios" className="mt-5 flex items-center justify-center gap-1 text-xs font-medium text-green-600 hover:text-green-700">
-              Ver relatório completo <ArrowUpRight className="h-3 w-3" />
+              Ver relatÃ³rio completo <ArrowUpRight className="h-3 w-3" />
             </Link>
           )}
         </div>
@@ -264,8 +264,8 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2 rounded-2xl border border-slate-200 bg-white p-6">
           <div className="mb-5">
-            <h3 className="text-sm font-semibold text-slate-900">Perdas por Mês</h3>
-            <p className="text-xs text-slate-400 mt-0.5">Evolução do desperdício em R$</p>
+            <h3 className="text-sm font-semibold text-slate-900">Perdas por MÃªs</h3>
+            <p className="text-xs text-slate-400 mt-0.5">EvoluÃ§Ã£o do desperdÃ­cio em R$</p>
           </div>
           <ResponsiveContainer width="100%" height={180}>
             <BarChart data={data?.graficoPerdas ?? []} margin={{ top: 5, right: 5, left: 0, bottom: 0 }}>
@@ -288,7 +288,7 @@ export default function DashboardPage() {
         </div>
 
         <div className="rounded-2xl border border-slate-200 bg-white p-6">
-          <h3 className="text-sm font-semibold text-slate-900 mb-5">Visão Geral</h3>
+          <h3 className="text-sm font-semibold text-slate-900 mb-5">VisÃ£o Geral</h3>
           <div className="space-y-3">
             <QuickStat
               label="Total em Estoque"
@@ -301,7 +301,7 @@ export default function DashboardPage() {
               color={(stats?.alertasValidade ?? 0) > 0 ? "amber" : "green"}
             />
             <QuickStat
-              label="Estoque Abaixo do Mínimo"
+              label="Estoque Abaixo do MÃ­nimo"
               value={String(stats?.estoqueBaixo ?? 0) + " produto(s)"}
               color={(stats?.estoqueBaixo ?? 0) > 0 ? "rose" : "green"}
             />
