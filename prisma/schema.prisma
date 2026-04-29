@@ -1,0 +1,173 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum StatusPedido {
+  PENDENTE
+  CONFIRMADO
+  ENTREGUE
+  CANCELADO
+}
+
+enum TipoMovimentacao {
+  ENTRADA
+  SAIDA_VENDA
+  SAIDA_PERDA
+  AJUSTE
+}
+
+enum MotivoParda {
+  VENCIMENTO
+  AVARIA
+  CONTAMINACAO
+  FURTO
+  OUTRO
+}
+
+model Produto {
+  id              String   @id @default(cuid())
+  nome            String
+  descricao       String?
+  unidade         String   @default("kg")
+  precoBase       Float
+  estoqueMinimo   Float    @default(0)
+  imagemUrl       String?
+  ativo           Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  lotes           Lote[]
+  itensPedido     ItemPedido[]
+  perdas          Perda[]
+  movimentacoes   Movimentacao[]
+
+  @@index([nome])
+  @@map("produtos")
+}
+
+model Lote {
+  id                String   @id @default(cuid())
+  produtoId         String
+  numero            String
+  quantidade        Float
+  quantidadeInicial Float
+  dataEntrada       DateTime @default(now())
+  dataValidade      DateTime
+  custoUnitario     Float
+  ativo             Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  produto           Produto  @relation(fields: [produtoId], references: [id])
+  movimentacoes     Movimentacao[]
+  itensPedido       ItemPedido[]
+  perdas            Perda[]
+
+  @@index([produtoId])
+  @@index([dataValidade])
+  @@index([dataEntrada])
+  @@map("lotes")
+}
+
+model Cliente {
+  id              String   @id @default(cuid())
+  nome            String
+  email           String?  @unique
+  telefone        String?
+  documento       String?  @unique
+  endereco        String?
+  cidade          String?
+  ativo           Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  pedidos         Pedido[]
+
+  @@index([nome])
+  @@map("clientes")
+}
+
+model Pedido {
+  id              String       @id @default(cuid())
+  clienteId       String
+  status          StatusPedido @default(PENDENTE)
+  observacao      String?
+  totalBruto      Float        @default(0)
+  totalDesconto   Float        @default(0)
+  totalLiquido    Float        @default(0)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  entregueEm      DateTime?
+
+  cliente         Cliente      @relation(fields: [clienteId], references: [id])
+  itens           ItemPedido[]
+
+  @@index([clienteId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("pedidos")
+}
+
+model ItemPedido {
+  id              String   @id @default(cuid())
+  pedidoId        String
+  produtoId       String
+  loteId          String
+  quantidade      Float
+  precoUnitario   Float
+  desconto        Float    @default(0)
+  subtotal        Float
+  createdAt       DateTime @default(now())
+
+  pedido          Pedido   @relation(fields: [pedidoId], references: [id], onDelete: Cascade)
+  produto         Produto  @relation(fields: [produtoId], references: [id])
+  lote            Lote     @relation(fields: [loteId], references: [id])
+
+  @@index([pedidoId])
+  @@index([produtoId])
+  @@map("itens_pedido")
+}
+
+model Movimentacao {
+  id              String           @id @default(cuid())
+  produtoId       String
+  loteId          String?
+  tipo            TipoMovimentacao
+  quantidade      Float
+  observacao      String?
+  referenciaId    String?
+  createdAt       DateTime         @default(now())
+
+  produto         Produto          @relation(fields: [produtoId], references: [id])
+  lote            Lote?            @relation(fields: [loteId], references: [id])
+
+  @@index([produtoId])
+  @@index([tipo])
+  @@index([createdAt])
+  @@map("movimentacoes")
+}
+
+model Perda {
+  id              String      @id @default(cuid())
+  produtoId       String
+  loteId          String
+  quantidade      Float
+  motivo          MotivoParda
+  observacao      String?
+  valorEstimado   Float
+  registradoPor   String?
+  createdAt       DateTime    @default(now())
+
+  produto         Produto     @relation(fields: [produtoId], references: [id])
+  lote            Lote        @relation(fields: [loteId], references: [id])
+
+  @@index([produtoId])
+  @@index([motivo])
+  @@index([createdAt])
+  @@map("perdas")
+}
+
