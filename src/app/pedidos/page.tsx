@@ -89,7 +89,7 @@ export default function PedidosPage() {
           <DialogTrigger asChild>
             <Button size="sm"><Plus className="h-3.5 w-3.5" />Novo Pedido</Button>
           </DialogTrigger>
-          <DialogContent className="max-w-2xl">
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <NovoPedidoForm onSuccess={() => { setNovoPedidoOpen(false); fetchPedidos(filtroStatus); }} />
           </DialogContent>
         </Dialog>
@@ -312,9 +312,9 @@ function NovoPedidoForm({ onSuccess }: { onSuccess: () => void }) {
             </Button>
           </div>
           {itens.length === 0 && <p className="text-sm text-slate-400 py-2">Nenhum item adicionado</p>}
-          <div className="space-y-3">
+          <div className="max-h-72 overflow-y-auto pr-1 space-y-3">
             {itens.map((item, i) => (
-              <div key={i} className="grid grid-cols-12 gap-2 items-end p-3 rounded-lg bg-slate-50 border border-slate-100">
+              <div key={i} className={"grid grid-cols-12 gap-2 items-end p-3 rounded-lg border " + (item.produtoId && item.loteId ? "bg-green-50 border-green-200" : "bg-slate-50 border-slate-100")}>
                 <div className="col-span-4">
                   <Select
                     label="Produto"
@@ -333,8 +333,9 @@ function NovoPedidoForm({ onSuccess }: { onSuccess: () => void }) {
                     onChange={(e) => atualizarItem(i, "loteId", e.target.value)}
                     required
                     disabled={!item.produtoId}
+                    className={!item.produtoId ? "cursor-not-allowed bg-slate-100" : ""}
                   >
-                    <option value="">Lote</option>
+                    <option value="">{!item.produtoId ? "— selecione o produto —" : "Selecione o lote"}</option>
                     {(lotesPorProduto[item.produtoId] ?? []).map((l) => (
                       <option key={l.id} value={l.id}>{l.numero} ({l.quantidade})</option>
                     ))}

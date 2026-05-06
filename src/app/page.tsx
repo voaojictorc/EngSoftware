@@ -123,14 +123,6 @@ export default function DashboardPage() {
       {/* Stat cards */}
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         <GradientCard
-          title="Faturamento do Mês"
-          value={formatCurrency(stats?.faturamentoMes ?? 0)}
-          subtitle="Receita acumulada"
-          icon={<TrendingUp className="h-5 w-5 text-white" />}
-          gradient="from-green-500 to-emerald-600"
-          href="/relatorios"
-        />
-        <GradientCard
           title="Pedidos Hoje"
           value={String(stats?.pedidosHoje ?? 0)}
           subtitle="Pedidos realizados"
@@ -153,6 +145,14 @@ export default function DashboardPage() {
           icon={<Trash2 className="h-5 w-5 text-white" />}
           gradient="from-rose-400 to-rose-600"
           href="/perdas"
+        />
+        <GradientCard
+          title="Faturamento do Mês"
+          value={formatCurrency(stats?.faturamentoMes ?? 0)}
+          subtitle="Receita acumulada"
+          icon={<TrendingUp className="h-5 w-5 text-white" />}
+          gradient="from-green-500 to-emerald-600"
+          href="/relatorios"
         />
       </div>
 
